@@ -61,6 +61,9 @@ body {
       caret-color: brown;
       border-radius: 0.5rem;
       border-color: crimson;
+      &:focus-visible {
+        outline: none;
+      }
     }
     .resize {
       height: 2rem;
