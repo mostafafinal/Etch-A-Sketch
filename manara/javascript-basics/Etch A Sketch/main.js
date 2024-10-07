@@ -77,5 +77,10 @@ function resizeGridBoxes() {
   gridsNumber = document.getElementById("grids-amount").value;
   document.querySelectorAll(".box").forEach((box) => box.remove());
   setGridBoxes();
+  const gridBoxes = document.querySelectorAll(".box");
+  gridBoxes.forEach((box) => {
+    box.style.cursor = "pointer";
+    box.addEventListener("mouseover", setGridsHover);
+  });
   document.getElementById("grids-amount").value = "";
 }
