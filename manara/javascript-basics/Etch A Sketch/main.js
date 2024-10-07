@@ -1,11 +1,19 @@
-const gridContainer = document.querySelector(".grid-container");
-
 let gridsNumber = 16;
 const GRIDS_BORDER = "0.0625rem solid #acacacfc";
 let gridsColor = "#e0e0e0";
 let gridsHoverColor = "black";
 
+const gridContainer = document.querySelector(".grid-container");
+const controls = document.querySelectorAll(".controls button");
+controls.forEach((control) => {
+  control.style.cursor = "pointer";
+  control.addEventListener("click", changBtnAction);
+});
+const resizeBtn = document.querySelector(".resize");
+resizeBtn.addEventListener("click", resizeGridBoxes);
+
 function setGridBoxes() {
+  // grid should be n*n e.g. 16×16 grid boxes
   for (let i = 1; i <= gridsNumber ** 2; i++) {
     const gridBox = document.createElement("div");
     gridBox.className = "box";
@@ -16,31 +24,23 @@ function setGridBoxes() {
 
     gridContainer.append(gridBox);
   }
-  setGridsHover();
-  setControlsBtns();
 }
 setGridBoxes();
 
-function setGridsHover() {
-  document.querySelectorAll(".box").forEach((box) => {
-    box.style.cursor = "pointer";
-    box.addEventListener("mouseover", (e) => {
-      if (gridsHoverColor == "random") {
-        e.target.style.backgroundColor = randomizeColor();
-      }
-      if (gridsHoverColor == "erase") {
-        e.target.style.backgroundColor = gridsColor;
-      }
-      e.target.style.backgroundColor = gridsHoverColor;
-    });
-  });
-}
+const gridBoxes = document.querySelectorAll(".box");
+gridBoxes.forEach((box) => {
+  box.style.cursor = "pointer";
+  box.addEventListener("mouseover", setGridsHover);
+});
 
-function setControlsBtns() {
-  document.querySelectorAll(".controls button").forEach((control) => {
-    control.style.cursor = "pointer";
-    control.addEventListener("click", changBtnAction);
-  });
+function setGridsHover() {
+  if (gridsHoverColor == "random") {
+    this.style.backgroundColor = randomizeColor();
+  }
+  if (gridsHoverColor == "erase") {
+    this.style.backgroundColor = gridsColor;
+  }
+  this.style.backgroundColor = gridsHoverColor;
 }
 
 function changBtnAction() {
@@ -65,9 +65,6 @@ function randomizeColor() {
   const B_RGB = Math.floor(Math.random() * 255);
   return `rgb(${R_RGB}, ${G_RGB}, ${B_RGB})`;
 }
-
-const resizeBtn = document.querySelector(".resize");
-resizeBtn.addEventListener("click", resizeGridBoxes);
 
 function resizeGridBoxes() {
   if (
