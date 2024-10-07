@@ -1,23 +1,23 @@
 const gridContainer = document.querySelector(".grid-container");
 
 let gridsNumber = 16;
-const GRIDS_SIZE = `calc(100% / ${gridsNumber})`;
 const GRIDS_BORDER = "0.0625rem solid #acacacfc";
 let gridsColor = "#e0e0e0";
 let gridsHoverColor = "black";
-console.log(gridsHoverColor);
 
 function setGridBoxes() {
   for (let i = 1; i <= gridsNumber ** 2; i++) {
     const gridBox = document.createElement("div");
     gridBox.className = "box";
-    gridBox.style.width = GRIDS_SIZE;
-    gridBox.style.height = GRIDS_SIZE;
+    gridBox.style.width = `calc(100% / ${gridsNumber})`;
+    gridBox.style.height = `calc(100% / ${gridsNumber})`;
     gridBox.style.border = GRIDS_BORDER;
     gridBox.style.backgroundColor = gridsColor;
 
     gridContainer.append(gridBox);
   }
+  setGridsHover();
+  setControlsBtns();
 }
 setGridBoxes();
 
@@ -35,17 +35,15 @@ function setGridsHover() {
     });
   });
 }
-setGridsHover();
 
 function setControlsBtns() {
   document.querySelectorAll(".controls button").forEach((control) => {
     control.style.cursor = "pointer";
-    control.addEventListener("click", btnAction);
+    control.addEventListener("click", changBtnAction);
   });
 }
-setControlsBtns();
 
-function btnAction() {
+function changBtnAction() {
   if (this.className == "black") {
     gridsHoverColor = "black";
   } else if (this.className == "grey") {
@@ -66,4 +64,21 @@ function randomizeColor() {
   const G_RGB = Math.floor(Math.random() * 255);
   const B_RGB = Math.floor(Math.random() * 255);
   return `rgb(${R_RGB}, ${G_RGB}, ${B_RGB})`;
+}
+
+const resizeBtn = document.querySelector(".resize");
+resizeBtn.addEventListener("click", resizeGridBoxes);
+
+function resizeGridBoxes() {
+  if (
+    document.getElementById("grids-amount").value < 2 ||
+    document.getElementById("grids-amount").value > 100 ||
+    document.getElementById("grids-amount").value === ""
+  ) {
+    return;
+  }
+  gridsNumber = document.getElementById("grids-amount").value;
+  document.querySelectorAll(".box").forEach((box) => box.remove());
+  setGridBoxes();
+  document.getElementById("grids-amount").value = "";
 }
